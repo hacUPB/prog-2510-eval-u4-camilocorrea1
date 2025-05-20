@@ -12,7 +12,7 @@ def listar_txt_csv():
         if archivo.endswith('.txt') or archivo.endswith('.csv'):
             archivos_filtrados.append(archivo)
 
-    print("Archivos .txt y .csv encontrados en el directorio actual:")
+    print("\nArchivos .txt y .csv encontrados en el directorio actual:")
     for archivo in archivos_filtrados:
         print(archivo)
 
@@ -107,12 +107,44 @@ def contar_palabras_y_caracteres(ruta):
     
 
     
-def reemplazar_palabra(ruta):
-    pass
+def reemplazar_palabra(ruta, palabra_buscar, palabra_reemplazar):
+    try:
+        with open(ruta, 'r', encoding='utf-8') as file:
+            contenido = file.read()
+        
+        nuevo_contenido = contenido.replace(palabra_buscar, palabra_reemplazar)
+
+        with open(ruta, 'w', encoding='utf-8') as file:
+            file.write(nuevo_contenido)
+
+        print(f"Se reemplazó '{palabra_buscar}' por '{palabra_reemplazar}' en el archivo.")
+    except Exception:
+        print("Ocurrió un error al procesar el archivo")
     
     
 def histograma_vocales(ruta):
-    pass
+    vocales = {'a': 0, 'e': 0, 'i': 0, 'o': 0, 'u': 0}
+
+    try:
+        with open(ruta, 'r', encoding='utf-8') as file:
+            texto = file.read().lower()
+            for letra in texto:
+                if letra in vocales:
+                    vocales[letra] += 1
+
+        print("\nFrecuencia de vocales:")
+        for vocal, cantidad in vocales.items():
+            print(f"{vocal.upper()}: {cantidad}")
+
+     
+        plt.bar(vocales.keys(), vocales.values())
+        plt.title("Histograma de Vocales")
+        plt.xlabel("Vocal")
+        plt.ylabel("Frecuencia")
+        plt.show()
+    except Exception:
+        print("Ocurrió un error al procesar el archivo")
+
 
 
 def main():
@@ -158,7 +190,9 @@ def main():
                 print("Primero seleccione un archivo.")
         elif opcion == '7':
             if ruta:
-                reemplazar_palabra(ruta)
+                palabra_buscar = input("Ingrese la palabra a buscar: ")
+                palabra_reemplazar = input("Ingrese la palabra a reemplazar: ")
+                reemplazar_palabra(ruta, palabra_buscar, palabra_reemplazar)
             else:
                 print("Primero seleccione un archivo.")
         elif opcion == '8':
